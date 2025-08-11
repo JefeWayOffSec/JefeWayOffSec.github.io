@@ -1,0 +1,27 @@
+/* Styles/shared/site-wide.css */
+
+/* --- Centralized Page Link Style --- */
+/* This style applies black text by default, and turns blue/underlines on hover/active.
+   It is intended to be used on links where a clean, dark text style is desired against a light background. */
+.page-link {
+    color: #000000; /* Black text */
+    text-decoration: none; /* No underline by default */
+    font-weight: 500; /* Medium font weight */
+    transition: color 0.2s ease, text-decoration 0.2s ease; /* Smooth transition for hover effects */
+}
+
+.page-link:hover {
+    color: #0000FF; /* Blue on hover */
+    text-decoration: underline; /* Underline on hover */
+}
+
+.page-link:active {
+    color: #0000AA; /* Darker blue when clicked */
+    text-decoration: underline; /* Underline when active */
+}
+
+/*
+   The following layout rules (.page-container, .sidebar, .main-content-area,
+   .sidebar-dark-theme, .sidebar-light-theme) have been moved to page-specific CSS
+   files (like ai-assistant-page.css) as they are not truly site-wide.
+*/
