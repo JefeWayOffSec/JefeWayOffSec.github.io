@@ -1,1 +1,53 @@
-<!-- Place Holder -->
+// Scripts/AIAssistantPage/main-ai-assistant.js
+
+// Updated import paths to reflect the new directory structure
+import { getDOMElements } from './utils/dom-elements.js';
+import { UIManager } from './utils/ui-manager.js';
+import { readFileAsText } from './services/file-reader-service.js';
+import { GeminiAPIService } from './services/gemini-api-service.js';
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Get all necessary DOM elements
+    const { rkhunterLogFileInput, analyzeLogButton, analysisLoading, analysisResult, warningMessage } = getDOMElements();
+
+    // Initialize UI state
+    UIManager.initUI(analysisLoading, warningMessage);
+
+    // Event listener for the Analyze Log button
+    analyzeLogButton.addEventListener('click', async () => {
+        const file = rkhunterLogFileInput.files[0]; // Get the selected file
+
+        if (!file) {
+            UIManager.displayResult(analysisResult, 'Please select an rkhunter log file to analyze.', 'warning');
+            return; // Exit the function
+        }
+
+        UIManager.showLoading(analysisLoading, analysisResult, warningMessage);
+
+        try {
+            const logContent = await readFileAsText(file); // Read the file content
+
+            // Define the prompt for the AI model
+            const prompt = `Analyze the following rkhunter log content. Identify any potential threats, warnings, or suspicious findings. For each finding, provide a brief explanation and suggest a potential solution or next step. If no threats are found, state that the log appears clean.
+
+rkhunter log content:
+\`\`\`
+${logContent}
+\`\`\`
+`;
+            // Get AI's response
+            const aiResponseText = await GeminiAPIService.generateContent(prompt);
+
+            // Display AI's response
+            UIManager.displayResult(analysisResult, aiResponseText, 'success');
+
+        } catch (error) {
+            // Handle any errors during file reading or AI analysis
+            UIManager.displayResult(analysisResult, `Error: ${error.message}. Please try again.`, 'error');
+            console.error('Application error:', error);
+        } finally {
+            // Always hide loading and show warning after process completes or fails
+            UIManager.hideLoading(analysisLoading, warningMessage);
+        }
+    });
+});
