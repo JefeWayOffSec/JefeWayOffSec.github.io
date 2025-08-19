@@ -179,7 +179,7 @@ body {
 .warning-word { color: #FF0000; } /* Bright Red */
 
 .warning-detail-text {
-    color: #FCA5A5; /* text-red-300 */
+    color: #D32F2F; /* text-darker-red often used for warnings */
     font-size: 1.125rem; /* text-lg */
 }
 
